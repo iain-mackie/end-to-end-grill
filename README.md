@@ -1,6 +1,7 @@
 # end-to-end-grill
 
 # REL
+pip install git+https://github.com/informagi/REL
 
 # GENRE
 git clone https://github.com/facebookresearch/GENRE/
