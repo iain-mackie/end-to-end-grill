@@ -2,6 +2,7 @@
 
 # REL
 pip install git+https://github.com/informagi/REL
+python -m spacy download en_core_web_sm
 
 # GENRE
 git clone https://github.com/facebookresearch/GENRE/
@@ -16,8 +17,8 @@ git clone https://github.com/pytorch/fairseq
 
 cd fairseq 
 
-pip install --editable ./
-
+on Linux: pip install --editable ./
+on MacOS: CFLAGS="-stdlib=libc++" pip install --editable ./
 
 # BLINK
 
