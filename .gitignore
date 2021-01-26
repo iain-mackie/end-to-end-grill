@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+rel_grill/data/*
+genre_grill/data/*
+blink_grill/data/*
+
+.idea/
