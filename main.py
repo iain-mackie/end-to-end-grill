@@ -8,6 +8,6 @@ if __name__ == '__main__':
     entity_links = run_genre_e2e_linking(documents=test_documents, model_path=genre_path, max_words=50, beam=5)
     for i in test_documents.keys():
         print(test_documents[i])
-        print(entity_links)
+        print(entity_links[i])
 
 
