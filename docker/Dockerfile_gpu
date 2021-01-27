@@ -33,7 +33,7 @@ RUN pip3 install git+https://github.com/informagi/REL
 WORKDIR /home/
 RUN git clone https://github.com/facebookresearch/GENRE/
 WORKDIR /home/GENRE/
-# RUN pip3 install -r requirements.txt ### Kilt issues
+# RUN pip3 install -r requirements.txt ### Avoids Kilt issues ###
 RUN python3 setup.py install
 WORKDIR /home/
 RUN git clone https://github.com/pytorch/fairseq
