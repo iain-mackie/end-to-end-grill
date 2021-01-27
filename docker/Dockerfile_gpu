@@ -1,0 +1,62 @@
+FROM nvidia/cuda:10.1-cudnn7-runtime-ubuntu18.04
+
+MAINTAINER Iain Mackie
+
+USER root
+
+# Install essentials
+RUN apt-get update && apt-get install -y \
+    software-properties-common  \
+    wget \
+    make \
+    gcc  \
+    git \
+    swig
+
+# Install python
+RUN apt-get install -y python3.7 \
+    python3-pip \
+    python-setuptools
+
+WORKDIR /home/
+
+# Install End-to-End Grill
+RUN git clone https://github.com/iain-mackie/end-to-end-grill
+WORKDIR /home/end-to-end-grill/
+RUN pip3 install -r requirements.txt
+
+
+# Install REL
+RUN pip3 install git+https://github.com/informagi/REL
+
+# Install GENRE
+WORKDIR /home/
+RUN git clone https://github.com/facebookresearch/GENRE/
+WORKDIR /home/GENRE/
+# RUN pip3 install -r requirements.txt ### Kilt issues
+RUN python3 setup.py install
+WORKDIR /home/
+RUN git clone https://github.com/pytorch/fairseq
+WORKDIR /home/fairseq/
+RUN pip3 install --editable ./
+RUN rm -rf /GENRE/
+
+# Install BLINK
+#WORKDIR /home/
+#RUN git clone https://github.com/facebookresearch/BLINK
+#WORKDIR /home/BLINK/
+#RUN pip3 install -r requirements.txt
+#RUN python3 setup.py install
+
+RUN pip3 install \
+    jupyter \
+    jupyterlab
+
+WORKDIR /home/
+
+
+
+
+
+
+

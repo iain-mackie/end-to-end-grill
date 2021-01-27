@@ -5,6 +5,7 @@ from rel_grill import e2e
 import json
 
 
+
 def get_queries(qrels_path):
     """ Get list of unique queries from qrels file. """
     queries = []
@@ -40,15 +41,25 @@ def get_query_text(query, topics_path):
 
 
 if __name__ == '__main__':
-    qrels_path = '/Users/iain/LocalStorage/coding/complex_information_needs/robust04_runs/robust04.qrels'
-    topics_path = '/Users/iain/LocalStorage/coding/complex_information_needs/robust04_runs/04.testset'
+
+    # qrels_path = '/Users/iain/LocalStorage/coding/complex_information_needs/robust04_runs/robust04.qrels'
+    # topics_path = '/Users/iain/LocalStorage/coding/complex_information_needs/robust04_runs/04.testset'
+    # genre_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago'
+    # rel_base_url = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/rel_grill/data/'
+    # out_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/robust_queries.json'
+
+    qrels_path = '/nfs/trec_robust04/qrels/robust04.qrels'
+    topics_path = '/nfs/trec_robust04/qrels/04.testset'
+    genre_path = '/nfs/trec_robust04/end-to-end-grill/genre_grill/data/'
+    rel_base_url = '/nfs/trec_robust04/end-to-end-grill/rel_grill/data/'
+    # out_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/robust_queries.json'
+    
+    rel_wiki_year = '2019'
+
     queries = get_queries(qrels_path)
 
-    genre_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago'
     genre_model = GENRE.from_pretrained(genre_path, eval_bleu_args='', eval_bleu_detok_args='').eval()
 
-    rel_base_url = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/rel_grill/data/'
-    rel_wiki_year = '2019'
     mention_detection, tagger_ner, entity_disambiguation = e2e.get_REL_models(rel_base_url, rel_wiki_year)
 
     linking_data = {}
@@ -74,8 +85,8 @@ if __name__ == '__main__':
         except:
             print(query, 'rel fail')
 
+    #
+    # with open(out_path, 'w') as fp:
+    #     json.dump(linking_data, fp, indent=4)
 
-    out_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/robust_queries.json'
-    with open(out_path, 'w') as fp:
-        json.dump(linking_data, fp, indent=4)
 
