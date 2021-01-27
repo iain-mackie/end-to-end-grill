@@ -22,6 +22,13 @@ on MacOS: CFLAGS="-stdlib=libc++" pip install --editable ./
 
 # BLINK
 
+git clone https://github.com/facebookresearch/BLINK
+
+pip install -r requirements.txt
+
+chmod +x download_blink_models.sh
+
+./download_blink_models.sh
 
 
 # Bootleg

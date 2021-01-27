@@ -133,3 +133,4 @@ genre_grill/data/*
 blink_grill/data/*
 
 .idea/
+*.DS_Store
