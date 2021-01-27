@@ -50,10 +50,10 @@ if __name__ == '__main__':
 
     qrels_path = '/nfs/trec_robust04/qrels/robust04.qrels'
     topics_path = '/nfs/trec_robust04/qrels/04.testset'
-    genre_path = '/nfs/trec_robust04/end-to-end-grill/genre_grill/data/'
+    genre_path = '/nfs/trec_robust04/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago'
     rel_base_url = '/nfs/trec_robust04/end-to-end-grill/rel_grill/data/'
     # out_path = '/Users/iain/LocalStorage/coding/github/end-to-end-grill/robust_queries.json'
-    
+
     rel_wiki_year = '2019'
 
     queries = get_queries(qrels_path)
