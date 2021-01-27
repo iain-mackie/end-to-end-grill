@@ -1,0 +1,56 @@
+
+- end of scripts groupwrite permissons (run chmod -R 775 *)
+- copy scp (chmod -R 775 * && chmod -R +w * && chgrp -R nfsnobody *)
+
+################################################
+
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: pythonmlnotebookgpu2-imackie
+  namespace: imackieproject
+spec:
+  replicas: 1
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      labels:
+        app: pythonMLNotebook
+        deploymentconfig: pythonMLNotebookGPU
+    spec:
+      nodeSelector:
+        #node-role.ida/gputitan: "true"
+        node-role.ida/gpu2080ti: "true"
+      containers:
+      - name: deepo-ml-plus-imackie
+        image: iainmackie/end-to-end-grill-gpu:v3
+        resources:
+          requests:
+            cpu: "8000m"
+            memory: "128Gi"
+            nvidia.com/gpu: 1
+          limits:
+            cpu: "16000m"
+            memory: "128Gi"
+            nvidia.com/gpu: 1
+        command:
+          - 'jupyter-lab'
+        args:
+          - '--no-browser'
+          - '--ip=0.0.0.0'
+          - '--allow-root'
+          - '--NotebookApp.token='
+          - '--notebook-dir="/nfs/"'
+        ports:
+          - containerPort: 8888
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /nfs/
+            name: nfs-access
+      securityContext: {}
+      serviceAccount: containerroot
+      volumes:
+      - name: nfs-access
+        persistentVolumeClaim:
+          claimName: imackievol1claim

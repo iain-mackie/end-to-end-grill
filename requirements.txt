@@ -1,4 +1,3 @@
-torch>=1.6
-transformers>=4.0
+
 unidecode
 requests
