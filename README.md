@@ -2,6 +2,7 @@
 
 # REL
 pip install git+https://github.com/informagi/REL
+pip install spacy
 python -m spacy download en_core_web_sm
 
 # GENRE
