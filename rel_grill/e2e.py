@@ -89,6 +89,6 @@ if __name__ == '__main__':
                 continue
             
             with open(f"{output_folder}/{file[:-5]}_rel.json","w") as g:
-                json.dump(predictions,g)
+                json.dump(predictions, g, indent=4)
             g.close()
     
