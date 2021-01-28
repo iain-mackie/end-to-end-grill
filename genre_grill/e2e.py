@@ -7,6 +7,7 @@ import torch
 import os
 import sys
 import json
+import datetime
 
 def run_genre_model(sentences, model, beam=5):
     """ Run GENRE e2e model returning on sentences (list of strings). Returning GENRE formatted outputs. """
@@ -177,9 +178,13 @@ if __name__ == '__main__':
 
     # assuming running from end-to-end folder
     genre_path = './genre_grill/data/fairseq_e2e_entity_linking_aidayago'
-
+    logging_name = 'genre_log.text'
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
+
+    with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+        f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
+    f_log.close()
 
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":
@@ -187,9 +192,16 @@ if __name__ == '__main__':
                 input_json = json.load(f)
             f.close()
 
-            predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5)
+            try:
+                predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5)
+            except:
+                print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
+                with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+                    f_log.write(f"FAIL:\t{input_folder}\t{file}\n")
+                f_log.close()
+                continue
 
             with open(f"{output_folder}/{file[:-5]}_genre.json", "w") as g:
-                json.dump(predictions, g)
+                json.dump(predictions, g, indent=4)
             g.close()
 
