@@ -34,9 +34,19 @@ def get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_dis
     mentions_dataset, n_mentions = mention_detection.find_mentions(processed_json, tagger_ner)
     predictions, timing = entity_disambiguation.predict(mentions_dataset)
     
-    for 
-
-    return predictions
+    output_dict = {}
+    for doc_id, mentions in predictions.items():
+        if doc_id not in output_dict:
+            output_dict[doc_id] = []
+        for mention in mentions:
+            mention_dict = {
+                "mention": mention["mention"],
+                "pred": mention["prediction"],
+                "links": mention["candidates"],
+                "scores" : mention["scores"]
+            }
+            output_dict[doc_id].append(mention_dict)
+    return output_dict
 
 
 if __name__ == '__main__':
