@@ -182,7 +182,7 @@ if __name__ == '__main__':
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
 
-    with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+    with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
         f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
     f_log.close()
 
