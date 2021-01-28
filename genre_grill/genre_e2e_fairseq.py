@@ -2,11 +2,13 @@
 from genre import GENRE
 from genre.entity_linking import get_end_to_end_prefix_allowed_tokens_fn_fairseq
 import spacy
-
+import torch
 
 
 def run_genre_model(sentences, model, beam=5):
     """ Run GENRE e2e model returning on sentences (list of strings). Returning GENRE formatted outputs. """
+    if torch.cuda.is_available():
+        model.cuda()
     prefix_allowed_tokens_fn = get_end_to_end_prefix_allowed_tokens_fn_fairseq(model, sentences)
     return model.sample(sentences,
                         beam=beam,
@@ -146,10 +148,4 @@ def run_genre_e2e_linking(documents, model_path, max_words=50, beam=5):
     return map_sentence_links_to_documents(sentences_links, index_map)
 
 
-if __name__ == '__main__':
-    from static import test_documents
-
-    genre_path = './data/fairseq_e2e_entity_linking_aidayago'
-    entity_links = run_genre_e2e_linking(documents=test_documents, model_path=genre_path)
-    print(entity_links)
 
