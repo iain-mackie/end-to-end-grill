@@ -1,5 +1,5 @@
 
-from genre_grill.genre_e2e_fairseq import run_genre_e2e_linking
+from genre_grill.e2e import run_genre_e2e_linking
 
 if __name__ == '__main__':
     from static import test_documents

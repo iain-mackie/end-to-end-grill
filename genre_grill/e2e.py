@@ -1,9 +1,12 @@
 
 from genre import GENRE
 from genre.entity_linking import get_end_to_end_prefix_allowed_tokens_fn_fairseq
+
 import spacy
 import torch
-
+import os
+import sys
+import json
 
 def run_genre_model(sentences, model, beam=5):
     """ Run GENRE e2e model returning on sentences (list of strings). Returning GENRE formatted outputs. """
@@ -14,6 +17,28 @@ def run_genre_model(sentences, model, beam=5):
                         beam=beam,
                         prefix_allowed_tokens_fn=prefix_allowed_tokens_fn,
                         )
+
+
+def format_entity_link(beam_links):
+    """ """
+    d = {}
+    for link in beam_links:
+        unique_id = (link['i'], link['mention'])
+        if unique_id in d:
+            d[unique_id].append(link)
+        else:
+            d[unique_id] = [link]
+
+    formatted_beam_links = []
+    for k in sorted(d.keys()):
+        link = {}
+        link['mention'] = k[1]
+        link['links'] = [i['link'] for i in d[k]]
+        link['scores'] = [i['score'] for i in d[k]]
+        link['pred'] = link['links'][0]
+        formatted_beam_links.append(link)
+
+    return formatted_beam_links
 
 
 def get_entity_links_from_genre_output(output):
@@ -64,8 +89,8 @@ def get_entity_links_from_genre_output(output):
                     link_text += char
 
         # Add beam_links to sentences_links (sorting by char index + remove 'i' keys)
-        sentences_links.append([{'mention': d['mention'], 'link': d['link'], 'score': d['score']}
-                                for d in sorted(beam_links, key=lambda k: k['i'])])
+        formatted_beam_links = format_entity_link(beam_links)
+        sentences_links.append(formatted_beam_links)
 
     return sentences_links
 
@@ -148,4 +173,23 @@ def run_genre_e2e_linking(documents, model_path, max_words=50, beam=5):
     return map_sentence_links_to_documents(sentences_links, index_map)
 
 
+if __name__ == '__main__':
+
+    # assuming running from end-to-end folder
+    genre_path = './genre_grill/data/fairseq_e2e_entity_linking_aidayago'
+
+    input_folder = sys.argv[1]
+    output_folder = sys.argv[2]
+
+    for file in os.listdir(input_folder):
+        if file[-5:] == ".json":
+            with open(f"{input_folder}/{file}") as f:
+                input_json = json.load(f)
+            f.close()
+
+            predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5)
+
+            with open(f"{output_folder}/{file[:-5]}_genre.json", "w") as g:
+                json.dump(predictions, g)
+            g.close()
 
