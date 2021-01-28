@@ -54,9 +54,13 @@ if __name__ == '__main__':
     #assuming running from end-to-end folder
     rel_base_url = './rel_grill/data'
     rel_wiki_year = '2019'
-    
+    logging_name = 'rel_log.text'
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
+    
+    with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
+        f_log.write('REL START PROCESS: {}\n'.format(datetime.datetime.now()))
+    f_log.close()
     
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":
@@ -65,7 +69,15 @@ if __name__ == '__main__':
             f.close()
             
             mention_detection, tagger_ner, entity_disambiguation = get_REL_models(rel_base_url, rel_wiki_year)
-            predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
+            
+            try:
+                predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
+            except:
+                print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
+                with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+                    f_log.write(f"FAIL:\t{input_folder}\t{file}\n")
+                f_log.close()
+                continue
             
             with open(f"{output_folder}/{file[:-5]}_rel.json","w") as g:
                 json.dump(predictions,g)
