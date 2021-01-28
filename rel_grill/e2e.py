@@ -68,6 +68,6 @@ if __name__ == '__main__':
             predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
             
             with open(f"{output_folder}/{file[:-5]}_rel.json","w") as g:
-                json.dump(predictions,g)
+                json.dump(predictions, g, indent=4)
             g.close()
     
