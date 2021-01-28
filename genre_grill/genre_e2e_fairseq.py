@@ -93,6 +93,8 @@ def get_sentence_chunks(s, max_words=50):
     sentence_chunks = []
     sentence_chunk = ''
     current_word_count = 0
+    #TODO - what if sentence > max_words (logic will fail)
+
     # Loop over sentences.
     for sent in doc.sents:
         sent_word_count = len(sent.text.split())
