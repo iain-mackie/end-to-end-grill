@@ -38,21 +38,21 @@ def get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_dis
     for doc_id, mentions in predictions.items():
         if doc_id not in output_dict:
             output_dict[doc_id] = []
-            
+
         for mention in mentions:
             valid_links = []
             valid_scores = []
             scores = mention["scores"]
             links = mention["candidates"]
             for i in range(len(scores)):
-                if scores[i] >= 0:
+                if float(scores[i]) >= 0.0:
                     valid_links.append(links[i])
-                    valid_scores.append(scores[i])
+                    valid_scores.append(float(scores[i]))
             mention_dict = {
                 "mention": mention["mention"],
                 "pred": mention["prediction"],
                 "links": valid_links,
-                "scores" : valid_scores
+                "scores": valid_scores
             }
             output_dict[doc_id].append(mention_dict)
     return output_dict
