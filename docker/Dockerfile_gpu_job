@@ -4,7 +4,7 @@ MAINTAINER Iain Mackie
 
 USER root
 
-CMD python3 /nfs/trec_robust04/end-to-end-grill/genre_grill/e2e.py ${INPUT} ${OUTPUT}
+CMD python3 /nfs/trec_robust04/end-to-end-grill/genre_grill/e2e.py ${INPUT} ${OUTPUT} ${MODEL}
 
 
 

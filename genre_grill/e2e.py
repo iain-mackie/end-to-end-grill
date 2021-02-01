@@ -181,6 +181,9 @@ if __name__ == '__main__':
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
     genre_path = sys.argv[3]
+    print('input_folder: {}'.format(input_folder))
+    print('output_folder: {}'.format(output_folder))
+    print('genre_path: {}'.format(genre_path))
 
     with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
         f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
