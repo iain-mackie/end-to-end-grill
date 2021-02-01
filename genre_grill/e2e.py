@@ -177,10 +177,10 @@ def run_genre_e2e_linking(documents, model_path, max_words=50, beam=5):
 if __name__ == '__main__':
 
     # assuming running from end-to-end folder
-    genre_path = './genre_grill/data/fairseq_e2e_entity_linking_aidayago'
     logging_name = 'genre_log.text'
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
+    genre_path = sys.argv[3]
 
     with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
         f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
