@@ -76,8 +76,10 @@ spec:
       value: /nfs/trec_robust04/parade_runs/sample_query_entity_title_desc_input
     - name: OUTPUT
       value: /nfs/trec_robust04/parade_runs/test_GENRE_cpu/
+    - name: MODEL
+      value: /nfs/trec_robust04/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago
     name: genre-entity-linking-container
-    image: iainmackie/end-to-end-grill-gpu-job:v4
+    image: iainmackie/end-to-end-grill-gpu-job:v6
     imagePullPolicy: IfNotPresent
     resources:
       requests:

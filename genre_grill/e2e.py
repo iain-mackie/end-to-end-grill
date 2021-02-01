@@ -185,6 +185,9 @@ if __name__ == '__main__':
     print('output_folder: {}'.format(output_folder))
     print('genre_path: {}'.format(genre_path))
 
+    if not os.path.exist(output_folder):
+        os.mkdir(output_folder)
+        
     with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
         f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
     f_log.close()
