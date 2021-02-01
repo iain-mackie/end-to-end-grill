@@ -1,0 +1,13 @@
+FROM iainmackie/end-to-end-grill-gpu:v4
+
+MAINTAINER Iain Mackie
+
+USER root
+
+CMD python3 /nfs/trec_robust04/end-to-end-grill/genre_grill/e2e.py ${INPUT} ${OUTPUT}
+
+
+
+
+
+

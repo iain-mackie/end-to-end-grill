@@ -24,7 +24,7 @@ spec:
         node-role.ida/gpu2080ti: "true"
       containers:
       - name: deepo-ml-plus-imackie
-        image: iainmackie/end-to-end-grill-gpu:v3
+        image: iainmackie/end-to-end-grill-gpu:v4
         resources:
           requests:
             cpu: "8000m"
@@ -54,3 +54,40 @@ spec:
       - name: nfs-access
         persistentVolumeClaim:
           claimName: imackievol1claim
+
+
+
+################################################
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: genre-entity-linking
+  namespace: imackieproject
+spec:
+  volumes:
+  - name: nfs-access
+    persistentVolumeClaim:
+      claimName: imackievol1claim
+  containers:
+  - env:
+    - name: INPUT
+      value: /nfs/trec_robust04/parade_runs/sample_query_entity_title_desc_input
+    - name: OUTPUT
+      value: /nfs/trec_robust04/parade_runs/test_GENRE_cpu/
+    name: genre-entity-linking-container
+    image: iainmackie/end-to-end-grill-gpu-job:v4
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: "1000m"
+        memory: "10Gi"
+      limits:
+        cpu: "16000m"
+        memory: "128Gi"
+    volumeMounts:
+    - mountPath: /nfs/
+      name: nfs-access
+  serviceAccount: containerroot
+  restartPolicy: Never
