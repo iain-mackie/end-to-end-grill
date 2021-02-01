@@ -185,7 +185,7 @@ if __name__ == '__main__':
     print('output_folder: {}'.format(output_folder))
     print('genre_path: {}'.format(genre_path))
 
-    if os.path.exist(output_folder) == False:
+    if os.path.isdir(output_folder) == False:
         os.mkdir(output_folder)
 
     log_path = os.path.join(output_folder, logging_name)
