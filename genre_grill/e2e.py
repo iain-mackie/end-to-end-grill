@@ -9,9 +9,9 @@ import sys
 import json
 import datetime
 
-def run_genre_model(sentences, model, beam=5):
+def run_genre_model(sentences, model, beam=5, use_gpu=False):
     """ Run GENRE e2e model returning on sentences (list of strings). Returning GENRE formatted outputs. """
-    if torch.cuda.is_available():
+    if (torch.cuda.is_available() and use_gpu):
         model.cuda()
     prefix_allowed_tokens_fn = get_end_to_end_prefix_allowed_tokens_fn_fairseq(model, sentences)
     return model.sample(sentences,
@@ -161,13 +161,13 @@ def build_sentences(documents, max_words=100):
     return doc_to_sentence_map, sentences
 
 
-def run_genre_e2e_linking(documents, model_path, max_words=50, beam=5):
+def run_genre_e2e_linking(documents, model_path, max_words=50, beam=5, use_gpu=False):
     """ Build entity linking given document using GENRE. """
     print('Prepocessing documents into passage chunks for GENRE.')
     index_map, sentences = build_sentences(documents, max_words=max_words)
     print('Running GENRE model.')
     model = GENRE.from_pretrained(model_path, eval_bleu_args='', eval_bleu_detok_args='').eval()
-    output = run_genre_model(sentences=sentences, model=model, beam=beam)
+    output = run_genre_model(sentences=sentences, model=model, beam=beam, use_gpu=use_gpu)
     print('Parsing GENRE output to entity links')
     sentences_links = get_entity_links_from_genre_output(output)
     print('Mapping entity links back to documents.')
@@ -181,9 +181,15 @@ if __name__ == '__main__':
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
     genre_path = sys.argv[3]
+    gpu_flag = sys.argv[4]
     print('input_folder: {}'.format(input_folder))
     print('output_folder: {}'.format(output_folder))
     print('genre_path: {}'.format(genre_path))
+
+    if gpu_flag == 'gpu':
+        use_gpu = True
+    else:
+        use_gpu = False
 
     if os.path.isdir(output_folder) == False:
         os.mkdir(output_folder)
@@ -200,7 +206,7 @@ if __name__ == '__main__':
             f.close()
 
             try:
-                predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5)
+                predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5, use_gpu=use_gpu)
                 with open(log_path, 'a+') as f_log:
                     f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
                 f_log.close()
