@@ -185,10 +185,11 @@ if __name__ == '__main__':
     print('output_folder: {}'.format(output_folder))
     print('genre_path: {}'.format(genre_path))
 
-    if not os.path.exist(output_folder):
+    if os.path.exist(output_folder) == False:
         os.mkdir(output_folder)
-        
-    with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
+
+    log_path = os.path.join(output_folder, logging_name)
+    with open(log_path, 'a+') as f_log:
         f_log.write('GENRE START PROCESS: {}\n'.format(datetime.datetime.now()))
     f_log.close()
 
@@ -203,14 +204,14 @@ if __name__ == '__main__':
             except Exception as e:
                 print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
                 print(e)
-                with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+                with open(log_path, 'a+') as f_log:
                     f_log.write(f"FAIL:\t{output_folder}\t{file}\n")
                     f_log.write(str(e)+ "\n")
-
                 f_log.close()
                 continue
 
-            with open(f"{output_folder}/{file[:-5]}_genre.json", "w") as g:
+            output_file_path = os.path.join(output_path, "{}_genre.json".format(file[:-5]))
+            with open(output_file_path, "w") as g:
                 json.dump(predictions, g, indent=4)
             g.close()
 
