@@ -213,8 +213,8 @@ if __name__ == '__main__':
                 f_log.close()
                 continue
 
-            output_file_path = os.path.join(output_path, "{}_genre.json".format(file[:-5]))
-            with open(output_file_path, "w") as g:
+            output_path = os.path.join(output_folder, "{}_genre.json".format(file[:-5]))
+            with open(output_path, "w") as g:
                 json.dump(predictions, g, indent=4)
             g.close()
 
