@@ -190,6 +190,7 @@ if __name__ == '__main__':
         use_gpu = True
     else:
         use_gpu = False
+    print('genre_path: {}'.format(use_gpu))
 
     if os.path.isdir(output_folder) == False:
         os.mkdir(output_folder)
