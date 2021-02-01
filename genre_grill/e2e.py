@@ -202,13 +202,13 @@ if __name__ == '__main__':
             try:
                 predictions = run_genre_e2e_linking(documents=input_json, model_path=genre_path, max_words=50, beam=5)
                 with open(log_path, 'a+') as f_log:
-                    f_log.write(f"SUCCESS:\t{output_folder}\t{file}\t{datetime.datetime.now()}\n")
+                    f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
                 f_log.close()
             except Exception as e:
                 print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
                 print(e)
                 with open(log_path, 'a+') as f_log:
-                    f_log.write(f"*** FAIL:\t{output_folder}\t{file}\t{datetime.datetime.now()}\n")
+                    f_log.write(f"*** FAIL:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
                     f_log.write(str(e)+ "\n")
                 f_log.close()
                 continue
