@@ -97,7 +97,7 @@ if __name__ == '__main__':
             except Exception as e:
                 print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
                 print(e)
-                with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
+                with open(log_path, 'a+') as f_log:
                     f_log.write(f"FAIL:\t{input_folder}\t{file}\n")
                 f_log.close()
                 continue
