@@ -81,7 +81,7 @@ spec:
     - name: GPU
       value: cpu
     name: genre-entity-linking-container
-    image: iainmackie/end-to-end-grill-gpu-job:v6
+    image: iainmackie/end-to-end-grill-gpu-job:v7
     imagePullPolicy: IfNotPresent
     resources:
       requests:
