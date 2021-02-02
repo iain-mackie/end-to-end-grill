@@ -81,7 +81,7 @@ if __name__ == '__main__':
     f_log.close()
 
     print('load models')
-    mention_detection, tagger_ner, entity_disambiguation = get_REL_models(rel_base_url, rel_wiki_year)
+    mention_detection, tagger_ner, entity_disambiguation = get_REL_models(model_path, rel_wiki_year)
 
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":
