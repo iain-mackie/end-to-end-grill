@@ -215,7 +215,7 @@ if __name__ == '__main__':
             f.close()
 
             try:
-                predictions = run_genre_e2e_linking(documents=input_json, model=model, max_words=50, beam=5, use_gpu=use_gpu)
+                predictions = run_genre_e2e_linking(documents=input_json, model=model, max_words=50, beam=5)
                 with open(log_path, 'a+') as f_log:
                     f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
                 f_log.close()
