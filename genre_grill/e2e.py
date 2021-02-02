@@ -182,14 +182,16 @@ def run_genre_e2e_linking(documents, model, max_words=50, beam=5):
 if __name__ == '__main__':
 
     # assuming running from end-to-end folder
+    #model_path = './genre_grill/data/fairseq_e2e_entity_linking_aidayago'
     logging_name = 'genre_log.text'
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
-    genre_path = sys.argv[3]
+    model_path = sys.argv[3]
     gpu_flag = sys.argv[4]
+
     print('input_folder: {}'.format(input_folder))
     print('output_folder: {}'.format(output_folder))
-    print('genre_path: {}'.format(genre_path))
+    print('model_path: {}'.format(model_path))
 
     if gpu_flag == 'gpu':
         use_gpu = True
@@ -206,7 +208,7 @@ if __name__ == '__main__':
     f_log.close()
 
     print('load model')
-    model = load_model(model_path=genre_path, use_gpu=use_gpu)
+    model = load_model(model_path=model_path, use_gpu=use_gpu)
 
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":

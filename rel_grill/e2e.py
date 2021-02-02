@@ -61,34 +61,50 @@ def get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_dis
 if __name__ == '__main__':
 
     #assuming running from end-to-end folder
-    rel_base_url = './rel_grill/data'
+    #model_path = './rel_grill/data'
     rel_wiki_year = '2019'
     logging_name = 'rel_log.text'
     input_folder = sys.argv[1]
     output_folder = sys.argv[2]
-    
-    with open(f"{output_folder}/{logging_name}", 'a+') as f_log:
+    model_path = sys.argv[3]
+
+    print('input_folder: {}'.format(input_folder))
+    print('output_folder: {}'.format(output_folder))
+    print('model_path: {}'.format(model_path))
+
+    if os.path.isdir(output_folder) == False:
+        os.mkdir(output_folder)
+
+    log_path = os.path.join(output_folder, logging_name)
+    with open(log_path, 'a+') as f_log:
         f_log.write('REL START PROCESS: {}\n'.format(datetime.datetime.now()))
     f_log.close()
-    
+
+    print('load models')
+    mention_detection, tagger_ner, entity_disambiguation = get_REL_models(rel_base_url, rel_wiki_year)
+
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":
             with open(f"{input_folder}/{file}") as f:
                 input_json = json.load(f)
             f.close()
-            
-            mention_detection, tagger_ner, entity_disambiguation = get_REL_models(rel_base_url, rel_wiki_year)
-            
+
             try:
                 predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
-            except:
+                with open(log_path, 'a+') as f_log:
+                    f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                f_log.close()
+            except Exception as e:
                 print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
+                print(e)
                 with open(f"{input_folder}/{logging_name}", 'a+') as f_log:
                     f_log.write(f"FAIL:\t{input_folder}\t{file}\n")
                 f_log.close()
                 continue
-            
-            with open(f"{output_folder}/{file[:-5]}_rel.json","w") as g:
+
+            output_path = os.path.join(output_folder, "{}_genre.json".format(file[:-5]))
+            print('writing: {}'.format(output_path))
+            with open(output_path,"w") as g:
                 json.dump(predictions, g, indent=4)
             g.close()
     
