@@ -1,0 +1,13 @@
+FROM iainmackie/end-to-end-grill-cpu:v1
+
+MAINTAINER Iain Mackie
+
+USER root
+
+CMD python3 /nfs/trec_robust04/end-to-end-grill/${LINKER}_grill/e2e.py ${INPUT} ${OUTPUT} ${MODEL} ${GPU}
+
+
+
+
+
+

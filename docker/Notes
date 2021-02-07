@@ -63,7 +63,7 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: genre-entity-linking
+  name: genre-entity-linking-gpu-fold-0
   namespace: imackieproject
 spec:
   volumes:
@@ -73,15 +73,59 @@ spec:
   containers:
   - env:
     - name: INPUT
-      value: /nfs/trec_robust04/parade_runs/sample_query_entity_title_desc_input
+      value: /nfs/trec_robust04/parade_runs/full_robust_linking_input_v2/fold_0/
     - name: OUTPUT
-      value: /nfs/trec_robust04/parade_runs/test_GENRE_cpu/
+      value: /nfs/trec_robust04/parade_runs/full_robust_linking_output_v2/fold_0/
     - name: MODEL
       value: /nfs/trec_robust04/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago
     - name: GPU
-      value: cpu
+      value: gpu
     name: genre-entity-linking-container
     image: iainmackie/end-to-end-grill-gpu-job:v7
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: "4000m"
+        memory: "32Gi"
+        nvidia.com/gpu: 1
+      limits:
+        cpu: "16000m"
+        memory: "128Gi"
+        nvidia.com/gpu: 1
+    volumeMounts:
+    - mountPath: /nfs/
+      name: nfs-access
+  serviceAccount: containerroot
+  restartPolicy: Never
+
+
+################################################
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rel-entity-linking-fold-0
+  namespace: imackieproject
+spec:
+  volumes:
+  - name: nfs-access
+    persistentVolumeClaim:
+      claimName: imackievol1claim
+  containers:
+  - env:
+    - name: LINKER
+      value: rel
+    - name: INPUT
+      value: /nfs/trec_robust04/parade_runs/full_robust_linking_input_v2/fold_0/
+    - name: OUTPUT
+      value: /nfs/trec_robust04/parade_runs/full_robust_linking_output_v2_rel/fold_0/
+    - name: MODEL
+      value: /nfs/trec_robust04/end-to-end-grill/rel_grill/data/
+    - name: GPU
+      value: cpu
+    name: genre-entity-linking-container
+    image: iainmackie/end-to-end-grill-cpu-job:v1
     imagePullPolicy: IfNotPresent
     resources:
       requests:
@@ -95,3 +139,4 @@ spec:
       name: nfs-access
   serviceAccount: containerroot
   restartPolicy: Never
+

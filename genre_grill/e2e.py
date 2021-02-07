@@ -75,9 +75,10 @@ def get_entity_links_from_genre_output(output):
                     # Add score.
                     link['score'] = beam['logprob'].cpu().numpy().tolist()
                     # If new 'link' and 'mention' add 'beam_links'
-                    if (link['link'] not in [d['link'] for d in beam_links]) or \
-                            (link['mention'] not in [d['mention'] for d in beam_links]):
-                        beam_links.append(link)
+                    if ('mention' in link) and ('i' in link):
+                        if (link['link'] not in [d['link'] for d in beam_links]) or \
+                                (link['mention'] not in [d['mention'] for d in beam_links]):
+                            beam_links.append(link)
                     link_text = ''
                     link = {}
 
