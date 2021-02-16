@@ -63,19 +63,22 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: genre-entity-linking-gpu-fold-0
+  name: genre-entity-linking-gpu-fold-4
   namespace: imackieproject
 spec:
   volumes:
   - name: nfs-access
     persistentVolumeClaim:
       claimName: imackievol1claim
+  nodeSelector:
+    #node-role.ida/gputitan: "true"
+    node-role.ida/gpu2080ti: "true"
   containers:
   - env:
     - name: INPUT
-      value: /nfs/trec_robust04/parade_runs/full_robust_linking_input_v2/fold_0/
+      value: /nfs/trec_robust04/parade_runs/fold_4/
     - name: OUTPUT
-      value: /nfs/trec_robust04/parade_runs/full_robust_linking_output_v2/fold_0/
+      value: /nfs/trec_robust04/parade_runs/full_robust_linking_output_v3/fold_4/
     - name: MODEL
       value: /nfs/trec_robust04/end-to-end-grill/genre_grill/data/fairseq_e2e_entity_linking_aidayago
     - name: GPU
