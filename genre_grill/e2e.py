@@ -239,7 +239,9 @@ if __name__ == '__main__':
                     json.dump(predictions, g, indent=4)
                 g.close()
             else:
-                f_log.write(f"PASS(already exist):\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                with open(log_path, 'a+') as f_log:
+                    f_log.write(f"PASS(already exist):\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                f_log.close()
 
 
 
