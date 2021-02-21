@@ -85,26 +85,32 @@ if __name__ == '__main__':
 
     for file in os.listdir(input_folder):
         if file[-5:] == ".json":
-            with open(f"{input_folder}/{file}") as f:
-                input_json = json.load(f)
-            f.close()
+            output_path = os.path.join(output_folder, "{}_rel.json".format(file[:-5]))
+            if not os.path.exists(output_path):
+                input_path = os.path.join(input_folder, file)
+                with open(input_path) as f:
+                    input_json = json.load(f)
+                f.close()
 
-            try:
-                predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
-                with open(log_path, 'a+') as f_log:
-                    f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
-                f_log.close()
-            except Exception as e:
-                print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
-                print(e)
-                with open(log_path, 'a+') as f_log:
-                    f_log.write(f"FAIL:\t{input_folder}\t{file}\n")
-                f_log.close()
-                continue
+                try:
+                    predictions = get_entity_ranking_REL(input_json, mention_detection, tagger_ner, entity_disambiguation)
+                    with open(log_path, 'a+') as f_log:
+                        f_log.write(f"SUCCESS:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                    f_log.close()
+                except Exception as e:
+                    print('FAIL in input_folder: {}, file: {}'.format(input_folder, file))
+                    print(e)
+                    with open(log_path, 'a+') as f_log:
+                        f_log.write(f"*** FAIL:\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                        f_log.write(str(e) + "\n")
+                    f_log.close()
+                    continue
 
-            output_path = os.path.join(output_folder, "{}_genre.json".format(file[:-5]))
-            print('writing: {}'.format(output_path))
-            with open(output_path,"w") as g:
-                json.dump(predictions, g, indent=4)
-            g.close()
-    
+                print('writing: {}'.format(output_path))
+                with open(output_path,"w") as g:
+                    json.dump(predictions, g, indent=4)
+                g.close()
+            else:
+                with open(log_path, 'a+') as f_log:
+                    f_log.write(f"PASS(already exist):\t{input_folder}\t{file}\t{datetime.datetime.now()}\n")
+                f_log.close()
