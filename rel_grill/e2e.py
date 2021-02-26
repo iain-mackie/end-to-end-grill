@@ -102,7 +102,7 @@ if __name__ == '__main__':
                 f_log.close()
                 continue
 
-            output_path = os.path.join(output_folder, "{}_genre.json".format(file[:-5]))
+            output_path = os.path.join(output_folder, "{}_rel.json".format(file[:-5]))
             print('writing: {}'.format(output_path))
             with open(output_path,"w") as g:
                 json.dump(predictions, g, indent=4)
